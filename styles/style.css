@@ -132,6 +132,7 @@ section {
     flex: 1;
     text-align: left;
     padding: 20px;
+    font-family: 'Crimson Text';
 }
 
 #image {
@@ -147,9 +148,23 @@ section {
 }
 
 #tarot {
-
+    font-family: 'Crimson Text', serif;
 }
 
+ /* fonts */
+ 
+ @font-face {
+    font-family: 'Crimson Text';
+    src: url('../fonts/Crimson_Text/CrimsonText-Regular.ttf') format('truetype'); 
+    font-weight: normal;
+    font-style: normal;
+}
 
+ @font-face {
+    font-family: 'Trajan Pro';
+    src: url('../fonts/trajan-pro/TrajanPro-Regular.ttf') format('truetype'); 
+    font-weight: normal;
+    font-style: normal;
+}
 
 /* @media rules */
