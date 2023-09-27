@@ -1,0 +1,98 @@
+/* element selector */
+
+body {
+    background-color: #001f33;
+    color: #deb992;
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    font-size: 16px;
+    line-height: 1.6em;
+}
+
+footer {
+    background-color: #1ba098;
+    color: #deb992;
+    margin-top: 100px;
+    padding: 5px;
+    text-align: center;
+}
+
+header {
+    /* image */
+    background-image: url('../images/dog.jpg');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 150px;
+    /* text */
+    padding-left: 10%;
+    padding-top: 1%;
+}
+
+main {
+    margin: auto;
+    margin-top: 50px;
+    width: 80%;
+}
+
+nav {
+    background-color: #1ba098;
+    margin-bottom: 30px;
+    overflow: hidden;
+    padding-left: 10%;
+}
+
+nav li{
+    float: left;
+}
+
+nav li a{
+    color: #deb992;
+    display: block;
+    padding: 10px 15px;
+    text-align: center;
+    text-decoration: none;
+}
+
+nav li a:hover:not(.active){
+    background-color: #50C9CE;
+    color: #deb992;
+}
+
+nav ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+/* class selector */
+
+.container {
+    padding: 20px;
+}
+
+.column {
+    box-sizing: border-box;
+    float: left;
+    height: auto;
+    margin-bottom: 10px;
+    padding: 10px;
+    width: 50%;
+}
+
+.staff {
+    border-radius: 50%;
+    margin-bottom: 10px;
+    width: 100%;
+}
+
+.tarot {
+    border-radius: 50%;
+    margin-bottom: 10px;
+    width: 75%;
+}
+
+.textarticle {
+    color: #ecedee;
+}
+
+/* @media rules */
