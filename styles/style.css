@@ -132,7 +132,8 @@ section {
     flex: 1;
     text-align: left;
     padding: 20px;
-    font-family: 'Crimson Text';
+    font-family: 'Crimson Text', serif;
+    color: rgb(255, 215, 0);
 }
 
 #image {
@@ -148,9 +149,10 @@ section {
 }
 
 #tarot {
-    font-family: 'Crimson Text', serif;
+    font-family: 'Trajan Pro', serif;
     font-size: 50pt;
     text-align: center;
+    color: rgb(255, 215, 0);
 }
 
  /* fonts */
