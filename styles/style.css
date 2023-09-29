@@ -154,12 +154,8 @@ section {
     height: auto;
 }
 
-#tarot {
-    font-family: 'Trajan Pro', serif;
-=======
 #tarot-title {
-    font-family: 'Crimson Text', serif;
->>>>>>> origin/main
+    font-family: 'Trajan Pro', serif;
     font-size: 50pt;
     text-align: center;
     color: rgb(255, 215, 0);
@@ -171,6 +167,17 @@ section {
 
 #tarot-title::after {
     content: ' \2234';
+}
+
+#wiki {
+    background-color: rgba(80, 201, 206, 0.2);
+    border-radius: 5%;
+    border: 3px solid rgb(255, 215, 0);
+    padding: 10px;
+}
+
+#wiki-cit {
+    text-align: right;
 }
 
 /* attribute selectors */
@@ -352,13 +359,9 @@ section {
     height: auto;
 }
 
-<<<<<<< main
-#tarot {
-    font-family: 'Trajan Pro', serif;
-=======
+
 #tarot-title {
     font-family: 'Crimson Text', serif;
->>>>>>> origin/main
     font-size: 50pt;
     text-align: center;
     color: rgb(255, 215, 0);
