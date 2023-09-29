@@ -1,4 +1,4 @@
-/* element selector */
+/* element selectors */
 
 body {
     background-color: #001f33;
@@ -70,7 +70,7 @@ section {
     width: 80%;
 }
 
-/* class selector */
+/* class selectors */
 
 .container {
     padding: 20px;
@@ -102,6 +102,7 @@ section {
 
 .label {
     font-size: small;
+    width: max-content;
 }
 
 .staff {
@@ -114,46 +115,65 @@ section {
     border-radius: 50%;
     margin-bottom: 10px;
     width: 100%;
+    outline: 2px solid rgba(255, 215, 0, 0.7);
+}
+
+.tarot:hover {
+    outline: 3px solid rgba(255, 215, 0, 1);
 }
 
 .textarticle {
     color: #ecedee;
 }
 
-/* id selector */
+/* id selectors */
 
-#container {
+#tarot-container {
     display: flex;
     justify-content: center;
     align-items: flex-start;
 }
 
-#description {
+#tarot-description {
     flex: 1;
     text-align: left;
     padding: 20px;
     font-family: 'Crimson Text';
 }
 
-#image {
+#tarot-image {
     flex: 1;
     position: sticky;
     top: 0;
     width:20%;
 }
 
-#image img {
+#tarot-image img {
     max-width: 100%;
     height: auto;
 }
 
-#tarot {
+#tarot-title {
     font-family: 'Crimson Text', serif;
     font-size: 50pt;
     text-align: center;
 }
 
- /* fonts */
+#tarot-title::before {
+    content: '\2234 1. ';
+}
+
+#tarot-title::after {
+    content: ' \2234';
+}
+
+/* attribute selectors */
+
+/* e.g.
+[data-type='primary' { ... }
+*/
+
+/* fonts */
  
  @font-face {
     font-family: 'Crimson Text';
