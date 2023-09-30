@@ -115,11 +115,11 @@ section {
     border-radius: 50%;
     margin-bottom: 10px;
     width: 100%;
-    outline: 2px solid rgba(255, 215, 0, 0.7);
+    border: 2px solid rgba(255, 215, 0, 0.7);
 }
 
 .tarot:hover {
-    outline: 3px solid rgba(255, 215, 0, 1);
+    border: 3px solid rgba(255, 215, 0, 1);
 }
 
 .textarticle {

@@ -31,7 +31,7 @@
 
         <div id="tarot-container">
             <div id="tarot-image">
-                <img src="../images/tarots/cards/Mago.png" alt="Il mago">
+                <img id="tarotimg" src="../images/tarots/cards/Mago.png" alt="Il mago">
             </div>
             <div id="tarot-description">
                 <div id="wiki">
@@ -61,4 +61,18 @@ Il numero 1 è il simbolo numerico del principio, dell'inizio e dell'unità.
         &copy; 2023 Oltre gli Dei 🦡;
     </footer>
 </body>
+<script>
+    function ottieniParametriDaURL() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const tarotimg = urlParams.get("tarotimg");
+
+        console.log(tarotimg);
+
+        if (tarotimg) {
+            document.getElementById("tarotimg").src = tarotimg;
+        }
+    }
+
+    window.onlad = ottieniParametriDaURL;
+</script>
 </html>
