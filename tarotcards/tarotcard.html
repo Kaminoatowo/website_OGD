@@ -64,15 +64,23 @@ Il numero 1 è il simbolo numerico del principio, dell'inizio e dell'unità.
 <script>
     function ottieniParametriDaURL() {
         const urlParams = new URLSearchParams(window.location.search);
-        const tarotimg = urlParams.get("tarotimg");
+        const nomeImmagine = urlParams.get("image");
+        const immagine = document.getElementById("tarotimg");
+        const testo = urlParams.get("testo");
+        const h2Element = document.querySelector("h2");
 
-        console.log(tarotimg);
+        console.log(nomeImmagine);
+        console.log(testo);
 
-        if (tarotimg) {
-            document.getElementById("tarotimg").src = tarotimg;
+        if (nomeImmagine) {
+            immagine.src = nomeImmagine;
+        }
+
+        if (testo) {
+            h2Element.textContent = testo;
         }
     }
 
-    window.onlad = ottieniParametriDaURL;
+    window.onlad = ottieniParametriDaURL();
 </script>
 </html>
