@@ -120,6 +120,7 @@ section {
 
 .tarot:hover {
     border: 3px solid rgba(255, 215, 0, 1);
+    background-color: rgba(80, 201, 206, 1);
 }
 
 .textarticle {
