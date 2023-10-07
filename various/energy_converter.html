@@ -6,12 +6,29 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Oltre gli Dei</title>
+    <style>
+        form {width: 50%; margin-left: 40%}
+        h1 {text-align: center;}
+    </style>
 </head>
 
 <body>
     <h1>Energy table</h1>
 
-    <form action="/action_page.php">
+    
+    <form name="nrgtable" method="post">
+        <input type="text" name="H" value="0" onChange="displayInfo(this.form, this.name);">Hartrees<br>
+        <input type="text" name="eV" value="0" onChange="displayInfo(this.form, this.name);">eV<br>
+        <input type="text" name="kJ/mol" value="0" onChange="displayInfo(this.form, this.name);">kJ/mol<br>
+        <input type="text" name="kcal/mol" value="0" onChange="displayInfo(this.form, this.name);">kcal/mol<br>
+        <input type="text" name="cm-1" value="0" onChange="displayInfo(this.form, this.name);">cm<sup>-1</sup><br>
+        <input type="text" name="V" value="0" onChange="displayInfo(this.form, this.name);">V for 1e<sup>-</sup> transfer<br>
+        <input type="text" name="K" value="0" onChange="displayInfo(this.form, this.name);">K (equivalent temperature)<br>
+        <input type="text" name="B" value="0" onChange="displayInfo(this.form, this.name);">Boltzmann population ratio at 298.15K<br>
+        <input type="text" name="GHz" value="0" onChange="displayInfo(this.form, this.name);">GHz<br>
+        <input type="text" name="nm-1" value="0" onChange="displayInfo(this.form, this.name);">nm<sup>-1</sup><br>
+    </form>
+    <!--form action="/action_page.php">
     <table class="center" class="paddingBetweenCols">
         <tr class="header">
             <th>Value</th> <th>Units</th>
@@ -58,7 +75,69 @@
         </tr>
     </table>
     <input type="submit"> <input type="reset">
-    </form>
+    </form-->
 </body>
+
+<script>
+    // inspired by energy convert by Tom Shattuck, Dept. of Chemistry, Colby College twshattu@colby.edu
+
+    // METHODS
+    function constants(conv) {
+        var numE = 9;
+        // Hartree
+            conv[0] = 1.000;
+        // eV
+            conv[1] = 2.7211399E+01;
+        // kJ/mol 
+            conv[2] = 2.6255002E+03;
+        // kcal/mol 
+            conv[3] = conv[2]/4.184;
+        // cm-1 
+            conv[4] = 2.1947463E+05;
+        // V
+            conv[5] = 2.6255002E+06/96484.6;
+        // K
+            conv[6] = 3.1577709E+05;
+        // Boltzmann
+            conv[7] = -conv[6];
+        // GHz
+            conv[8] = conv[4]*29.9792458E+00;
+        // nm-1 
+            conv[9] = conv[4]*1E-07;
+        return numE;
+    }
+
+    function displayInfo(form, field) {
+        // find field index
+        for (var i=0; i<=nfields; i++) {
+            if (form.elements[i].name == field) {
+                idx = i;
+                break;
+            }
+        }
+
+        // find number of characters in input string for significatn figure funcitons
+        nchars = form.elements[idx].value.length + 1;
+
+        // calculate the base energy in Hartrees
+        if (idx!=7) {
+            energy = form.elements[idx].value / conv[idx];
+        } else {
+            energy = Math.log(form.elements[idx].value)*29815/conv[idx];
+        }
+
+        // convert to other units
+        for (var i=0; i<=nfields; i++) {
+            if (i != idx) {
+                if (i != 7) {
+                    form.elements[i].value = energy*conv[i];
+                } else {
+                    form.elements[i].value = trunc(Math.exp(energy*conv[i]/298.15),4);
+                }
+            }
+        }
+        
+    }
+</script>
 
 </html>
