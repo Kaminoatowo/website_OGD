@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Digital life</title>
+        <link rel="digital_life.css">
+    </head>
+    <body>
+        <select onChange="changeAlgo(this.value);">
+            <option value="-">Select algorithm</option>
+            <option value="live">Live</option>
+            <option value="conway">Game of life</option>
+        </select>
+
+        <canvas id="life" width="500" height="500"></canvas>
+        <script type="text/javascript" src="digital_life.js"></script>
+        <script id="life_algorithm" src=""></script>
+
+        <div id="gridContainer">
+
+        </div>
+
+        <div class="controls">
+            <button id="start">
+                <span>Start</span>
+            </button>
+            <button id="start">
+                <span>Clear</span>
+            </button>
+            <button id="start">
+                <span>Random</span>
+            </button>
+        </div>
+    </body>
+</html>
