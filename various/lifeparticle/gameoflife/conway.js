@@ -195,6 +195,7 @@ updateView = () => {
     }
 }
 
+
 clearButtonHandler = () => {
     console.log("Clear the game: stop playing, clear the grid")
 
@@ -238,6 +239,6 @@ function startButtonHandler() {
 // **** MAIN ****...
 
 // Start everything
-window.onload = initialize;
+window.onload = initialize()
 
 // ...**** MAIN ****
