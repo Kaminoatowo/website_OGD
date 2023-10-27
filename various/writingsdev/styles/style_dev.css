@@ -10,6 +10,10 @@ body {
     margin: 0% 10%;
 }
 
+div.desc {
+    margin: 0% 5%;
+}
+
 h1 {
     color: rgb(250, 116, 117);
     font-style: italic;
@@ -34,6 +38,12 @@ img.center {
     display: block;
     margin-left: auto;
     margin-right: auto;
+}
+
+img.gallery {
+    height: 50%;
+    width: 50%;
+    margin: 5% 25%;
 }
 
 li.nav_body {
@@ -86,6 +96,11 @@ ul.nav_head {
     padding: 10px;
 }
 
+.column {
+    width: 33%;
+    float: left;
+}
+
 /* Hide scrollbar for Chrome, Safari and Opera */
 .container::-webkit-scrollbar {
     display: none;
@@ -100,6 +115,22 @@ ul.nav_head {
     /* Hide scrollbar for IE, Edge and Firefox */
     -ms-overflow-style: none;  /* IE and Edge */
     scrollbar-width: none;  /* Firefox */
+}
+
+.dot {
+  height: 5px;
+  width: 5px;
+  background-color: #555;
+  border-radius: 50%;
+  display: inline-block;
+  margin: 1% 0%;
+}
+
+.frame {
+    background-color: aliceblue;
+    align-items: center;
+    border-radius: 5px;
+    margin: 5px;
 }
 
 .gray_text {
@@ -147,8 +178,16 @@ ul.nav_head {
     color: crimson;
 }
 
+.page_numbers {
+    clear: left;
+}
+
 .page_numbers a {
     padding: .1em;
+}
+
+.page_numbers a:hover {
+    color: crimson;
 }
 
 /*.topleft {
