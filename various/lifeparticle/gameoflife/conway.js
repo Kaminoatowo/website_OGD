@@ -29,13 +29,32 @@ const reproductionTime = 100
     }
 }*/
 
+play = () => {
+    computeNextGen();
+
+    if (playing) {
+        timer = setTimeout(play, reproductionTime)
+    }
+}
+
+computeNextGen = () => {
+    for (let i = 0; i < ROWS; i++) {
+        for (let j = 0; j < COLS; j++) {
+            applyRules(i, j)
+        }
+    }
+
+    copyAndResetGrid()
+    updateView()
+}
+
 // RULES
 // Any live cell with fewer than two live neighbours dies, as if caused by under-population.
 // Any live cell with two or three live neighbours lives on to the next generation.
 // Any live cell with more than three live neighbours dies, as if by overcrowding.
 // Any dead cell with exactly three live neighbours becomes a live cell, as if by reproduction.
 
-function applyRules(row, col) {
+applyRules = (row, col) => {
     var numNeighbors = countNeighbors(row, col);
     if (grid[row][col] == 1) {
         if (numNeighbors < 2) {
@@ -52,7 +71,7 @@ function applyRules(row, col) {
         }
     }
     
-function countNeighbors(row, col) {
+countNeighbors = (row, col) => {
     var count = 0;
     if (row-1 >= 0) {
         if (grid[row-1][col] == 1) count++;
@@ -81,8 +100,6 @@ function countNeighbors(row, col) {
     return count;
 }
 
-// Start everything
-window.onload = initialize;
 // ...**** PARTICLES ****
 
 // **** VARIOUS ****...
@@ -178,6 +195,14 @@ updateView = () => {
     }
 }
 
+clearButtonHandler = () => {
+    console.log("Clear the game: stop playing, clear the grid")
+
+    playing = false
+    let startButton = document.getElementById('start')
+    startButton.innerHTML = "Start"
+    clearTimeout(timer)
+
     
     var cellsList = document.getElementsByClassName("live");
     // convert to array first, otherwise, you're working on a live node list
@@ -212,5 +237,7 @@ function startButtonHandler() {
 
 // **** MAIN ****...
 
+// Start everything
+window.onload = initialize;
 
 // ...**** MAIN ****
