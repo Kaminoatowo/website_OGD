@@ -30,7 +30,7 @@ const reproductionTime = 100
 }*/
 
 play = () => {
-    computeNextGen();
+    computeNextGen()
 
     if (playing) {
         timer = setTimeout(play, reproductionTime)
@@ -55,49 +55,49 @@ computeNextGen = () => {
 // Any dead cell with exactly three live neighbours becomes a live cell, as if by reproduction.
 
 applyRules = (row, col) => {
-    var numNeighbors = countNeighbors(row, col);
+    var numNeighbors = countNeighbors(row, col)
     if (grid[row][col] == 1) {
         if (numNeighbors < 2) {
-            nextGrid[row][col] = 0;
+            nextGrid[row][col] = 0
         } else if (numNeighbors == 2 || numNeighbors == 3) {
-            nextGrid[row][col] = 1;
+            nextGrid[row][col] = 1
         } else if (numNeighbors > 3) {
-            nextGrid[row][col] = 0;
+            nextGrid[row][col] = 0
         }
     } else if (grid[row][col] == 0) {
             if (numNeighbors == 3) {
-                nextGrid[row][col] = 1;
+                nextGrid[row][col] = 1
             }
         }
     }
     
 countNeighbors = (row, col) => {
-    var count = 0;
+    var count = 0
     if (row-1 >= 0) {
-        if (grid[row-1][col] == 1) count++;
+        if (grid[row-1][col] == 1) count++
     }
     if (row-1 >= 0 && col-1 >= 0) {
-        if (grid[row-1][col-1] == 1) count++;
+        if (grid[row-1][col-1] == 1) count++
     }
-    if (row-1 >= 0 && col+1 < cols) {
-        if (grid[row-1][col+1] == 1) count++;
+    if (row-1 >= 0 && col+1 < COLS) {
+        if (grid[row-1][col+1] == 1) count++
     }
     if (col-1 >= 0) {
-        if (grid[row][col-1] == 1) count++;
+        if (grid[row][col-1] == 1) count++
     }
-    if (col+1 < cols) {
-        if (grid[row][col+1] == 1) count++;
+    if (col+1 < COLS) {
+        if (grid[row][col+1] == 1) count++
     }
-    if (row+1 < rows) {
-        if (grid[row+1][col] == 1) count++;
+    if (row+1 < ROWS) {
+        if (grid[row+1][col] == 1) count++
     }
-    if (row+1 < rows && col-1 >= 0) {
-        if (grid[row+1][col-1] == 1) count++;
+    if (row+1 < ROWS && col-1 >= 0) {
+        if (grid[row+1][col-1] == 1) count++
     }
-    if (row+1 < rows && col+1 < cols) {
-        if (grid[row+1][col+1] == 1) count++;
+    if (row+1 < ROWS && col+1 < COLS) {
+        if (grid[row+1][col+1] == 1) count++
     }
-    return count;
+    return count
 }
 
 // ...**** PARTICLES ****
@@ -197,34 +197,34 @@ updateView = () => {
 
 function setupControlButtons() {
     // button to start
-    var startButton = document.getElementById('start');
-    startButton.onclick = startButtonHandler;
+    var startButton = document.getElementById('start')
+    startButton.onclick = startButtonHandler()
     
     // button to clear
-    var clearButton = document.getElementById('clear');
-    clearButton.onclick = clearButtonHandler;
+    var clearButton = document.getElementById('clear')
+    clearButton.onclick = clearButtonHandler()
     
     // button to set random initial state
-    var randomButton = document.getElementById("random");
-    randomButton.onclick = randomButtonHandler;
+    var randomButton = document.getElementById("random")
+    randomButton.onclick = randomButtonHandler()
 }
 
 function randomButtonHandler() {
-    if (playing) return;
-    clearButtonHandler();
+    if (playing) return
+    clearButtonHandler()
     for (var i = 0; i < rows; i++) {
         for (var j = 0; j < cols; j++) {
-            var isLive = Math.round(Math.random());
+            var isLive = Math.round(Math.random())
             if (isLive == 1) {
-                var cell = document.getElementById(i + "_" + j);
-                cell.setAttribute("class", "live");
-                grid[i][j] = 1;
+                var cell = document.getElementById(i + "_" + j)
+                cell.setAttribute("class", "live")
+                grid[i][j] = 1
             }
         }
     }
 }
 
-clearButtonHandler = () => {
+function clearButtonHandler() {
     console.log("Clear the game: stop playing, clear the grid")
 
     playing = false
@@ -233,32 +233,32 @@ clearButtonHandler = () => {
     clearTimeout(timer)
 
     
-    var cellsList = document.getElementsByClassName("live");
+    var cellsList = document.getElementsByClassName("live")
     // convert to array first, otherwise, you're working on a live node list
     // and the update doesn't work!
-    var cells = [];
+    var cells = []
     for (var i = 0; i < cellsList.length; i++) {
-        cells.push(cellsList[i]);
+        cells.push(cellsList[i])
     }
     
     for (var i = 0; i < cells.length; i++) {
-        cells[i].setAttribute("class", "dead");
+        cells[i].setAttribute("class", "dead")
     }
-    resetGrids;
+    resetGrids()
 }
 
 // start/pause/continue the game
 function startButtonHandler() {
     if (playing) {
-        console.log("Pause the game");
-        playing = false;
-        this.innerHTML = "Continue";
-        clearTimeout(timer);
+        console.log("Pause the game")
+        playing = false
+        this.innerHTML = "Continue"
+        clearTimeout(timer)
     } else {
-        console.log("Continue the game");
-        playing = true;
-        this.innerHTML = "Pause";
-        play();
+        console.log("Continue the game")
+        playing = true
+        this.innerHTML = "Pause"
+        play()
     }
 }
 
