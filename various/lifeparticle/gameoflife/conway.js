@@ -64,15 +64,15 @@ computeNextGen = () => {
     var numNeighbors = countNeighbors(row, col);
     if (grid[row][col] == 1) {
         if (numNeighbors < 2) {
-            nextGrid[row][col] = 0;
+            nextGrid[row][col] = 0
         } else if (numNeighbors == 2 || numNeighbors == 3) {
-            nextGrid[row][col] = 1;
+            nextGrid[row][col] = 1
         } else if (numNeighbors > 3) {
-            nextGrid[row][col] = 0;
+            nextGrid[row][col] = 0
         }
     } else if (grid[row][col] == 0) {
             if (numNeighbors == 3) {
-                nextGrid[row][col] = 1;
+                nextGrid[row][col] = 1
             }
         }
     }
@@ -81,28 +81,28 @@ computeNextGen = () => {
 /*countNeighbors = (row, col) => {
     var count = 0;
     if (row-1 >= 0) {
-        if (grid[row-1][col] == 1) count++;
+        if (grid[row-1][col] == 1) count++
     }
     if (row-1 >= 0 && col-1 >= 0) {
-        if (grid[row-1][col-1] == 1) count++;
+        if (grid[row-1][col-1] == 1) count++
     }
-    if (row-1 >= 0 && col+1 < cols) {
-        if (grid[row-1][col+1] == 1) count++;
+    if (row-1 >= 0 && col+1 < COLS) {
+        if (grid[row-1][col+1] == 1) count++
     }
     if (col-1 >= 0) {
-        if (grid[row][col-1] == 1) count++;
+        if (grid[row][col-1] == 1) count++
     }
-    if (col+1 < cols) {
-        if (grid[row][col+1] == 1) count++;
+    if (col+1 < COLS) {
+        if (grid[row][col+1] == 1) count++
     }
-    if (row+1 < rows) {
-        if (grid[row+1][col] == 1) count++;
+    if (row+1 < ROWS) {
+        if (grid[row+1][col] == 1) count++
     }
-    if (row+1 < rows && col-1 >= 0) {
-        if (grid[row+1][col-1] == 1) count++;
+    if (row+1 < ROWS && col-1 >= 0) {
+        if (grid[row+1][col-1] == 1) count++
     }
-    if (row+1 < rows && col+1 < cols) {
-        if (grid[row+1][col+1] == 1) count++;
+    if (row+1 < ROWS && col+1 < COLS) {
+        if (grid[row+1][col+1] == 1) count++
     }
     return count;
 }*/
