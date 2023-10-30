@@ -9,10 +9,11 @@
     </head>
     <body>
         <select onChange="changeAlgo(this.value);">
-            <option value="-">Select algorithm</option>
-            <option value="live">Live</option>
-            <option value="live_physics">Live with physics</option>
-            <option value="conway">Game of life</option>
+            <option id="empty" value="-">Select algorithm</option>
+            <option id="live" value="live">Live</option>
+            <option id="ca1d" value="ca">1D cellular automata</option>
+            <option id="physics" value="live_physics">Live with physics</option>
+            <option id="conway" value="conway">Game of life</option>
         </select>
 
         <canvas id="life" width="500" height="500"></canvas>

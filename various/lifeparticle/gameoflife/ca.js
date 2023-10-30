@@ -1,9 +1,9 @@
 // **** CONSTANTS ****...
-const SCREEN_W = 100
-const SCREEN_H = 100
+const SCREEN_W = 600
+const SCREEN_H = 600
 
-const W = 50
-const H = 50
+const W = 100
+const H = 100
 // ...**** CONSTANTS ****
 
 // **** WORLD ****...
@@ -12,6 +12,7 @@ class World {
         this.w = w
         this.h = h 
         this.cells = new Array(w * h).fill(false)
+        this.set(true, 0, Math.floor(this.w/2))
     }
 
     get(row, col) {
@@ -28,50 +29,10 @@ class World {
 }
 // ...**** WORLD ****
 
-// **** RULES ****...
-function countNeighborsColumns(row, col) {
-    let counted = 0
-    if (col == 0) {
-        for (let icol = 0; icol < 2; icol++) {
-            counted += world.get(row, col + icol)
-        }
-    } else if (col == H-1) {
-        for (let icol = -1; icol < 1; icol++) {
-            counted += world.get(row, col + icol)
-        }
-    } else {
-        for (let icol = -1; icol < 2; icol++) {
-            counted += world.get(row, col + icol)
-        }
-    }
-    return counted
-}
-
-function countNeighbors(row, col) {
-    let counted = 0
-    if (row == 0) {
-        for (let irow = 0; irow < 2; irow++) {
-            counted = countNeighborsColumns(row + irow, col)
-        }
-    } else if (row == W-1) {
-        for (let irow = -1; irow < 1; irow++) {
-            counted = countNeighborsColumns(row + irow, col)
-        }
-    } else {
-        for (let irow = -1; irow < 1; irow++) {
-            counted = countNeighborsColumns(row + irow, col)
-        }
-    }
-    return counted
-}
-
+// **** SCREEN ****...
 function update() {
-    for (let i = 0; i < H; i++) {
-        for (let j = 0; j < W; j++){
-            let neighbors = countNeighbors(i, j)
-            console.log(neighbors)
-        }
-        /*const w = [world.get(curRow - 1, i),
+    for (let i = 0; i < W - 2; i++) {
+        const w = [world.get(curRow - 1, i),
             world.get(curRow - 1, i+1),
             world.get(curRow - 1, i+2)]
         
@@ -87,14 +48,12 @@ function update() {
             world.set(false, curRow, i + 1)
         } else {
             world.set(true, curRow, i + 1)
-        }*/
+        }
     }
-    //curRow++
+    curRow++
+    console.log(curRow)
 }
 
-// ...**** RULES ****
-
-// **** SCREEN ****...
 function draw() {
     for (let i = 0; i < H; i++) {
         for (let j = 0; j < W; j++) {
@@ -106,25 +65,22 @@ function draw() {
     }
 }
 
+function drawCell(cell) {
+    if (cell) {
+        m.fillStyle = "red";
+        m.fillRect(0, 0, SCREEN_H, SCREEN_W)
+    } else {
+        m.fillStyle = "green";
+        m.fillRect(0, 0, SCREEN_H, SCREEN_W)
+    }
+}
+
 setInterval(() => {
     m.clearRect(0, 0, SCREEN_W, SCREEN_H)
     update()
     draw()
 }, 100);
 // ...**** SCREEN ****
-
-// **** VARIOUS ****...
-// redefine random function
-random = () => {
-    return Math.floor(Math.random()*SCREEN_W)
-}
-
-randomSetter = (grid, number) => {
-    for (let i = 0; i < number; i++) {
-        grid.set(true, random(), random())
-    }
-}
-// ...**** VARIOUS ****
 
 // **** MAIN ****...
 screen = document.getElementById("life")
@@ -133,9 +89,7 @@ screen.height = SCREEN_H
 const m = screen.getContext('2d')
 m.scale(SCREEN_W / W, SCREEN_H / H)
 let world = new World(W, H)
-let nextWorld = new World(W, H)
-randomSetter(world, 100)
-
+let curRow = 1
 const rules = new Map()
 
 // **** RULES ****...
@@ -146,6 +100,7 @@ rules.set([false, true, true], true)
 rules.set([true, false, true], true)
 rules.set([true, true, false], true)
 rules.set([true, false, false], true)
-rules.set([true, true, true], false)
+rules.set([true, true, true], false
+    )
 // ...**** RULES ****
 // ...**** MAIN ****
