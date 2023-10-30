@@ -1,9 +1,21 @@
 // **** CONSTANTS ****...
-// size of the grid
-const ROWS = 38
-const COLS = 100
-// logic control of the game
-let playing = false
+// size of the canvas square
+const screensize = 500
+// upper-left coordinates of the canvas 
+const upperleftx = 0
+const upperlefty = 0
+// width and height of the screen
+const screenwidth = screensize
+const screenheight = screensize
+// size of particles
+const PARTICLE_SIZE = 5
+// multipliers of particles' velocity
+const SPEED = 0.5
+// limits of the particles' world
+const mind = 0
+const maxd = 80
+const minpos = 0
+const maxpos = 500
 // timer
 let timer
 const reproductionTime = 100
@@ -11,32 +23,26 @@ const reproductionTime = 100
 
 
 // **** PARTICLES ****...
-/*updateState = () => {
-    for (let x = 1; x < state.__width - 1; x++) {
-        for (let y = 1; y < state.__width - 1; y++) {
-            let neighbors = 0
-            for (let i = x - 1; i < x + 2; x++) {
-                for (let j = y - 1; j < y + 2; y++) {
-                    if (state.get(i,j) != 0) {neighbors += 1}
-                }
-            }
-            if (state.get(x,y) != 0) {
-                if (neighbors == 2 || neighbors == 3) {state.set(x, y, 1)}
-            } else {
-                if (neighbors == 3) {state.set(x, y, 1)}
-            }
-        }
-    }
-}*/
-
-play = () => {
-    computeNextGen();
-
-    if (playing) {
-        timer = setTimeout(play, reproductionTime)
-    }
+particle = (x,y,c) => {
+    return{"x":x, "y":y, "color":c}
 }
 
+// create number of particles with a given color
+create = (number, color) => {
+    group = []
+    for (let i = 0; i < number; i++){
+        for (let xi = 0; xi < maxpos; xi++){
+            for (let yi = 0; yi < maxpos; yi++){
+                group.push(particle(xi, yi, color))
+            }
+        }
+        //group.push(particle(i, i, color))
+        
+        particles.push(group[i])
+    }
+        return group
+}
+/*
 computeNextGen = () => {
     for (let i = 0; i < ROWS; i++) {
         for (let j = 0; j < COLS; j++) {
@@ -46,7 +52,7 @@ computeNextGen = () => {
 
     copyAndResetGrid()
     updateView()
-}
+}*/
 
 // RULES
 // Any live cell with fewer than two live neighbours dies, as if caused by under-population.
@@ -54,7 +60,7 @@ computeNextGen = () => {
 // Any live cell with more than three live neighbours dies, as if by overcrowding.
 // Any dead cell with exactly three live neighbours becomes a live cell, as if by reproduction.
 
-applyRules = (row, col) => {
+/*applyRules = (row, col) => {
     var numNeighbors = countNeighbors(row, col);
     if (grid[row][col] == 1) {
         if (numNeighbors < 2) {
@@ -70,8 +76,9 @@ applyRules = (row, col) => {
             }
         }
     }
-    
-countNeighbors = (row, col) => {
+}*/
+
+/*countNeighbors = (row, col) => {
     var count = 0;
     if (row-1 >= 0) {
         if (grid[row-1][col] == 1) count++;
@@ -98,7 +105,7 @@ countNeighbors = (row, col) => {
         if (grid[row+1][col+1] == 1) count++;
     }
     return count;
-}
+}*/
 
 // ...**** PARTICLES ****
 
@@ -107,9 +114,21 @@ countNeighbors = (row, col) => {
 // ...**** VARIOUS ****
 
 // **** TABLE **** ...
-let grid = new Array(ROWS)
-let nextGrid = new Array(ROWS)
+// draw things on screen
+draw = (x,y,c,s) => {
+    m.fillStyle = c
+    m.fillRect(x, y, s, s)
+}
 
+update = () => {
+    m.clearRect(0, 0, screenwidth, screenheight)
+    draw(0, 0, "black", screensize)
+    for (i = 0; i < particles.length; i++) {
+        draw(particles[i].x, particles[i].y, particles[i].color, PARTICLE_SIZE)
+    }
+    requestAnimationFrame(update)
+}
+/*
 initializeGrids = () => {
     for (let i = 0; i < ROWS; i++) {
         grid[i] = new Array(COLS)
@@ -165,22 +184,6 @@ createTable = () => {
     gridContainer.appendChild(table)
 }
 
-cellClickHandler = () => {
-    let rowcol = this.IdleDeadline.split("_")
-    let row = rowcol[0]
-    let col = rowcol[1]
-
-    let classes = this.getAttribute("class")
-
-    if (classes.indexOf("live") > -1) {
-        this.setAttribute("class", "dead")
-        grid[row][col] = 0
-    } else {
-        this.setAttribute("class", "alive")
-        grid[row][col] = 1
-    }
-}
-
 updateView = () => {
     for (let i = 0; i < ROWS; i++) {
         for (let j = 0; j < ROWS; j++) {
@@ -193,80 +196,16 @@ updateView = () => {
             }
         }    
     }
-}
-
-function setupControlButtons() {
-    // button to start
-    var startButton = document.getElementById('start');
-    startButton.onclick = startButtonHandler;
-    
-    // button to clear
-    var clearButton = document.getElementById('clear');
-    clearButton.onclick = clearButtonHandler;
-    
-    // button to set random initial state
-    var randomButton = document.getElementById("random");
-    randomButton.onclick = randomButtonHandler;
-}
-
-function randomButtonHandler() {
-    if (playing) return;
-    clearButtonHandler();
-    for (var i = 0; i < rows; i++) {
-        for (var j = 0; j < cols; j++) {
-            var isLive = Math.round(Math.random());
-            if (isLive == 1) {
-                var cell = document.getElementById(i + "_" + j);
-                cell.setAttribute("class", "live");
-                grid[i][j] = 1;
-            }
-        }
-    }
-}
-
-clearButtonHandler = () => {
-    console.log("Clear the game: stop playing, clear the grid")
-
-    playing = false
-    let startButton = document.getElementById('start')
-    startButton.innerHTML = "Start"
-    clearTimeout(timer)
-
-    
-    var cellsList = document.getElementsByClassName("live");
-    // convert to array first, otherwise, you're working on a live node list
-    // and the update doesn't work!
-    var cells = [];
-    for (var i = 0; i < cellsList.length; i++) {
-        cells.push(cellsList[i]);
-    }
-    
-    for (var i = 0; i < cells.length; i++) {
-        cells[i].setAttribute("class", "dead");
-    }
-    resetGrids;
-}
-
-// start/pause/continue the game
-function startButtonHandler() {
-    if (playing) {
-        console.log("Pause the game");
-        playing = false;
-        this.innerHTML = "Continue";
-        clearTimeout(timer);
-    } else {
-        console.log("Continue the game");
-        playing = true;
-        this.innerHTML = "Pause";
-        play();
-    }
-}
+}*/
 
 // ...**** TABLE ****
 
 // **** MAIN ****...
+/*let grid = new Array(ROWS)
+let nextGrid = new Array(ROWS)*/
 
-// Start everything
-window.onload = initialize()
-
+m = document.getElementById("life").getContext('2d')
+particles = []
+particles = create(500, "yellow")
+update()
 // ...**** MAIN ****

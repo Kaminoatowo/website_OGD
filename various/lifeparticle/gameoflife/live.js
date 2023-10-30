@@ -28,8 +28,14 @@ particle = (x,y,c) => {
 // create number of particles with a given color
 create = (number, color) => {
     group = []
-    for (let i =0; i < number; i++){
+    for (let i = 0; i < number; i++){
         group.push(particle(random(), random(), color))
+        /*for (let ix = minpos; ix < maxpos; ix++) {
+            for (let iy = minpos; iy < maxpos; iy++) {
+                group.push(particle(ix, iy, color))
+            }    
+        }*/
+        
         particles.push(group[i])
     }
         return group
