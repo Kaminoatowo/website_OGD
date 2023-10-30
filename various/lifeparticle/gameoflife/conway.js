@@ -1,6 +1,6 @@
 // **** CONSTANTS ****...
-const SCREEN_W = 100
-const SCREEN_H = 100
+const SCREEN_W = 600
+const SCREEN_H = 600
 
 const W = 50
 const H = 50
@@ -66,36 +66,26 @@ function countNeighbors(row, col) {
 }
 
 function update() {
+    console.log("updating...")
     for (let i = 0; i < H; i++) {
         for (let j = 0; j < W; j++){
             let neighbors = countNeighbors(i, j)
-            console.log(neighbors)
+            if (world.get(i, j) && (neighbors == 2 || neighbors == 3)) {
+                nextWorld.set(true, i, j)
+            } else if (!world.get(i, j) && (neighbors == 3)) {
+                nextWorld.set(true, i, j)
+            } else {
+                nextWorld.set(false, i, j)
+            }
         }
-        /*const w = [world.get(curRow - 1, i),
-            world.get(curRow - 1, i+1),
-            world.get(curRow - 1, i+2)]
-        
-        //world.set(rules.get(w), curRow, i + 1)
-        //console.log(w)
-        if (w[0] == false && w[1] == false && w[2] == false) {
-            world.set(false, curRow, i + 1)
-        } else if (w[0] == true && w[1] == true && w[2] == true) {
-            world.set(false, curRow, i + 1)
-        } else if (w[0] == true && w[1] == true && w[2] == false) {
-            world.set(false, curRow, i + 1)
-        } else if (w[0] == true && w[1] == false && w[2] == true) {
-            world.set(false, curRow, i + 1)
-        } else {
-            world.set(true, curRow, i + 1)
-        }*/
     }
-    //curRow++
 }
 
 // ...**** RULES ****
 
 // **** SCREEN ****...
 function draw() {
+    console.log("drawing...")
     for (let i = 0; i < H; i++) {
         for (let j = 0; j < W; j++) {
             if (world.get(i, j)) {
@@ -106,11 +96,20 @@ function draw() {
     }
 }
 
+updateWorld = () => {
+    for (let i = 0; i < H; i++) {
+        for (let j = 0; j < W; j++) {
+            world.set(nextWorld.get(i, j), i, j)
+        }    
+    }
+}
+
 setInterval(() => {
     m.clearRect(0, 0, SCREEN_W, SCREEN_H)
     update()
+    //updateWorld()
     draw()
-}, 100);
+}, 1000);
 // ...**** SCREEN ****
 
 // **** VARIOUS ****...
@@ -119,9 +118,9 @@ random = () => {
     return Math.floor(Math.random()*SCREEN_W)
 }
 
-randomSetter = (grid, number) => {
+randomSetter = (number) => {
     for (let i = 0; i < number; i++) {
-        grid.set(true, random(), random())
+        world.set(true, random(), random())
     }
 }
 // ...**** VARIOUS ****
@@ -134,18 +133,8 @@ const m = screen.getContext('2d')
 m.scale(SCREEN_W / W, SCREEN_H / H)
 let world = new World(W, H)
 let nextWorld = new World(W, H)
-randomSetter(world, 100)
+//randomSetter(SCREEN_H*SCREEN_W/20)
+randomSetter(10)
+//const rules = new Map()
 
-const rules = new Map()
-
-// **** RULES ****...
-rules.set([false, false, false], false)
-rules.set([false, false, true], true)
-rules.set([false, true, false], true)
-rules.set([false, true, true], true)
-rules.set([true, false, true], true)
-rules.set([true, true, false], true)
-rules.set([true, false, false], true)
-rules.set([true, true, true], false)
-// ...**** RULES ****
 // ...**** MAIN ****
