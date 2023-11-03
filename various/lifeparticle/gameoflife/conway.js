@@ -1,9 +1,13 @@
 // **** CONSTANTS ****...
-const SCREEN_W = 600
-const SCREEN_H = 600
+const SCREEN_SIZE = 500
 
-const W = 50
-const H = 50
+const SCREEN_W = SCREEN_SIZE
+const SCREEN_H = SCREEN_SIZE
+
+const W = SCREEN_W
+const H = SCREEN_H
+
+const CELL_SIZE = 1
 // ...**** CONSTANTS ****
 
 // **** WORLD ****...
@@ -66,9 +70,9 @@ function countNeighbors(row, col) {
 }
 
 function update() {
-    console.log("updating...")
-    for (let i = 0; i < H; i++) {
-        for (let j = 0; j < W; j++){
+    //console.log("updating...")
+    for (let i = 1; i < H - 1; i++) {
+        for (let j = 1; j < W - 1; j++){
             let neighbors = countNeighbors(i, j)
             if (world.get(i, j) && (neighbors == 2 || neighbors == 3)) {
                 nextWorld.set(true, i, j)
@@ -85,12 +89,12 @@ function update() {
 
 // **** SCREEN ****...
 function draw() {
-    console.log("drawing...")
+    //console.log("drawing...")
     for (let i = 0; i < H; i++) {
         for (let j = 0; j < W; j++) {
             if (world.get(i, j)) {
                 m.fillStyle = "red";
-                m.fillRect(j, i, 1, 1)
+                m.fillRect(j, i, CELL_SIZE, CELL_SIZE)
             }
         }
     }
@@ -109,7 +113,7 @@ setInterval(() => {
     update()
     //updateWorld()
     draw()
-}, 1000);
+}, 100);
 // ...**** SCREEN ****
 
 // **** VARIOUS ****...
@@ -130,11 +134,12 @@ screen = document.getElementById("life")
 screen.width = SCREEN_W
 screen.height = SCREEN_H
 const m = screen.getContext('2d')
-m.scale(SCREEN_W / W, SCREEN_H / H)
+//m.scale(SCREEN_W / 10, SCREEN_H / 10)
+//m.scale(10, 10)
 let world = new World(W, H)
 let nextWorld = new World(W, H)
-//randomSetter(SCREEN_H*SCREEN_W/20)
-randomSetter(10)
+randomSetter(SCREEN_H*SCREEN_W/2)
+//randomSetter(10)
 //const rules = new Map()
 
 // ...**** MAIN ****

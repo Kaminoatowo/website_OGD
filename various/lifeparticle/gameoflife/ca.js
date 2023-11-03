@@ -2,8 +2,8 @@
 const SCREEN_W = 600
 const SCREEN_H = 600
 
-const W = 100
-const H = 100
+const W = 600
+const H = 600
 // ...**** CONSTANTS ****
 
 // **** WORLD ****...
