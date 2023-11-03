@@ -1,6 +1,6 @@
 // **** CONSTANTS ****...
-const SCREEN_W = 600
-const SCREEN_H = 600
+const SCREEN_W = 500
+const SCREEN_H = 500
 
 const W = 50
 const H = 50
@@ -130,11 +130,11 @@ screen = document.getElementById("life")
 screen.width = SCREEN_W
 screen.height = SCREEN_H
 const m = screen.getContext('2d')
-m.scale(SCREEN_W / W, SCREEN_H / H)
+//m.scale(SCREEN_W / W, SCREEN_H / H)
 let world = new World(W, H)
 let nextWorld = new World(W, H)
-//randomSetter(SCREEN_H*SCREEN_W/20)
-randomSetter(10)
+randomSetter(SCREEN_H*SCREEN_W/20)
+//randomSetter(10)
 //const rules = new Map()
 
 // ...**** MAIN ****
