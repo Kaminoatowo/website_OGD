@@ -10,7 +10,7 @@ const screenheight = screensize
 // size of particles
 const PARTICLE_SIZE = 5
 // multipliers of particles' velocity
-const SPEED = 0.5
+const SPEED = 0.3
 // limits of the particles' world
 const mind = 0
 const maxd = 80
@@ -100,10 +100,15 @@ update = () => {
     rule(green, green, -0.32)
     rule(green, yellow, 0.34)
     rule(green, red, -0.17)
+    rule(green, purple, 0)
     rule(yellow, green, -0.20)
     rule(yellow, yellow, 0.15)
+    rule(yellow, purple, -0.45)
     rule(red, green, -0.34)
     rule(red, red, -0.10)
+    rule(red, purple, -0.67)
+    rule(purple, green, -0.32)
+    rule(purple, yellow, 0.46)
     // EXAMPLE 1 ##
     // ...**** RULES ****
     m.clearRect(0, 0, screenwidth, screenheight)
@@ -125,5 +130,6 @@ particles = []
 yellow = create(200, "yellow")
 red = create(200, "red")
 green = create(200, "green")
+purple = create(200, "purple")
 update()
 // ...**** MAIN ****
