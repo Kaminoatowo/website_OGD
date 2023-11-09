@@ -47,19 +47,32 @@ class World {
 // **** RULES ****...
 function countNeighbors(rows, cols) {
 
-    let counted = 0
+    let n = 0
+    let count = 0
+    
+    for (let r = 0; r < rows.length; r++) {
+        for (let c = 0; c < cols.length; c++) {
+            if (r == 1 && c == 1) {
 
-    for (r in rows) {
-        for (c in cols) {
-            counted += world.get(r, c)
+            }else {
+                if (world.get(rows[r], cols[c])) {
+                    n += 1
+                }
+            }
         }
     }
-    return counted
+
+    //if (n == 2) world.set(true, 0, 0)
+    return n
 
 }
 
 function changeState(irow, icol, env) {
-    if (world.get(irow, icol) && (env == 2 || env == 3)) {
+    //nextWorld.set(true, 0, 0)
+    //if (env > 1) {world.set(true, irow, icol)}
+    nextWorld.set(world.get(irow, icol), irow, icol)
+
+    /*if (world.get(irow, icol) && (env == 2 || env == 3)) {
         nextWorld.set(true, irow, icol)
     } else if (world.get(irow, icol) && (env < 2)) {
         nextWorld.set(false, irow, icol)
@@ -69,7 +82,7 @@ function changeState(irow, icol, env) {
         nextWorld.set(true, irow, icol)
     } else {
         nextWorld.set(world.get(irow, icol), irow, icol)
-    }
+    }*/
 }
 
 function updateWorld() {
@@ -77,6 +90,7 @@ function updateWorld() {
     //randomSetter(nextGrid, NUMBER_PARTICLES)
 
     let neighbors = 0
+
     
     for (let i = 0 ; i < gridheight; i++) {
         if (i == 0) {
@@ -127,11 +141,11 @@ function updateWorld() {
         }
     }
 
-    reset(world)
+    //reset(world)
 
     for (let i = 0; i < gridheight; i++) {
         for (let j = 0; j < gridwidth; j++) {
-            world.set(nextWorld.get(i,j), i, j)
+            world.set(nextWorld.get(i, j), i, j)
         }
     }
 }
@@ -167,6 +181,7 @@ update = () => {
     drawRect(0, 0, "black", screensize)
     
     draw(world)
+    
     
     requestAnimationFrame(update)
     
