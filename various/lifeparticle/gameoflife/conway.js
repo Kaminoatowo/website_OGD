@@ -8,8 +8,8 @@ const upperlefty = 0
 const screenwidth = screensize
 const screenheight = screensize
 // size of particles 
-const PARTICLE_SIZE = screensize/5
-const NUMBER_PARTICLES = 5//screenheight*screenwidth/2
+const PARTICLE_SIZE = screensize/100
+const NUMBER_PARTICLES = 10000//screenheight*screenwidth/(2)
 // width and height of the grid
 const gridwidth = screenwidth/PARTICLE_SIZE
 const gridheight = screenheight/PARTICLE_SIZE
@@ -48,47 +48,38 @@ class World {
 function countNeighbors(rows, cols) {
 
     let n = 0
-    let count = 0
     
     for (let r = 0; r < rows.length; r++) {
         for (let c = 0; c < cols.length; c++) {
-            if (r == 1 && c == 1) {
-
-            }else {
-                if (world.get(rows[r], cols[c])) {
-                    n += 1
-                }
+            if (r*c != 1 && world.get(rows[r], cols[c])) {
+                n += 1
             }
         }
     }
-
-    //if (n == 2) world.set(true, 0, 0)
     return n
 
 }
 
 function changeState(irow, icol, env) {
-    //nextWorld.set(true, 0, 0)
-    //if (env > 1) {world.set(true, irow, icol)}
-    nextWorld.set(world.get(irow, icol), irow, icol)
 
-    /*if (world.get(irow, icol) && (env == 2 || env == 3)) {
+    if (world.get(irow, icol) && (env == 2 || env == 3)) {
         nextWorld.set(true, irow, icol)
+        console.log("particle [" + irow + ", " + icol + "] survived")
     } else if (world.get(irow, icol) && (env < 2)) {
         nextWorld.set(false, irow, icol)
+        console.log("particle [" + irow + ", " + icol + "] died")
     } else if (world.get(irow, icol) && (env > 3)) {
         nextWorld.set(false, irow, icol)
+        console.log("particle [" + irow + ", " + icol + "] died")
     } else if (!world.get(irow, icol) && (env == 3)) {
         nextWorld.set(true, irow, icol)
+        console.log("particle [" + irow + ", " + icol + "] born")
     } else {
         nextWorld.set(world.get(irow, icol), irow, icol)
-    }*/
+    }
 }
 
 function updateWorld() {
-    //console.log("updating...")
-    //randomSetter(nextGrid, NUMBER_PARTICLES)
-
     let neighbors = 0
 
     
@@ -124,7 +115,7 @@ function updateWorld() {
                 changeState(i, j, neighbors)
             }
         } else {
-            const indicesH = [i - 1, 0, i +1]
+            const indicesH = [i - 1, i, i +1]
             for (let j = 0 ; j < gridwidth; j++) {
                 if (j == 0) {
                     const indicesW = [gridwidth - 1, 0, 1]
@@ -140,8 +131,6 @@ function updateWorld() {
             }
         }
     }
-
-    //reset(world)
 
     for (let i = 0; i < gridheight; i++) {
         for (let j = 0; j < gridwidth; j++) {
@@ -211,26 +200,13 @@ randomSetter = (grid, number) => {
 
 // **** MAIN ****...
 c = document.getElementById("life")
-/*c.height = screenheight
-c.width = screenwidth*/
 m = c.getContext('2d')
-/*m.scale(500, 500)
-m.strokeRect(5, 5, 100, 50)*/
-//document.getElementById("debug").inerHTML = "Get canvas"
 let world = new World(gridwidth, gridheight)
-//document.getElementById("debug").inerHTML = "Create world"
 let nextWorld = new World(gridwidth, gridheight)
-//randomSetter(world, NUMBER_PARTICLES)
 reset(world)
-//world.set(true, 0, 1)
-world.set(true, 1, 0)
-world.set(true, 1, 1)
-world.set(true, 1, 2)
-//world.set(true, 2, 1)
+reset(nextWorld)
+randomSetter(world, NUMBER_PARTICLES)
 randomSetter(nextWorld, NUMBER_PARTICLES)
-//randomSetter(world, 10)
-//world.set(true, 0, PARTICLE_SIZE)
-
 update()
 
 // ...**** MAIN ****
