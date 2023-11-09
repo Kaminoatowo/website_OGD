@@ -100,7 +100,6 @@ rules.set([false, true, true], true)
 rules.set([true, false, true], true)
 rules.set([true, true, false], true)
 rules.set([true, false, false], true)
-rules.set([true, true, true], false
-    )
+rules.set([true, true, true], false)
 // ...**** RULES ****
 // ...**** MAIN ****
