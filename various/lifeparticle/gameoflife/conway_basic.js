@@ -46,6 +46,29 @@ class World {
         console.log(this.cells)
     }
 }
+
+const makeWrap = (grid) => {
+    let wrapGrid = new World(gridwidth + 2, gridheight + 2)
+
+    for (let i = 0; i < gridheight; i++) {
+        for (let j = 0; j < gridwidth; j++) {
+            wrapGrid.set(grid.get(i, j), i + 1, j + 1)
+        }
+    }
+    for (let i = 0; i < gridheight; i++) {
+        wrapGrid.set(grid.get(i, gridwidth - 1), i + 1, 0)
+        wrapGrid.set(grid.get(i, 0), i + 1, gridwidth + 1)
+    }
+    for (let j = 0; j < gridwidth; j++) {
+        wrapGrid.set(grid.get(gridheight - 1, j), 0, j + 1)
+        wrapGrid.set(grid.get(0, j), gridheight + 1, j + 1)
+    }
+    wrapGrid.set(grid.get(gridheight - 1, gridwidth - 1), 0, 0)
+    wrapGrid.set(grid.get(gridheight - 1, 0), 0, gridwidth + 1)
+    wrapGrid.set(grid.get(0, gridwidth - 1), gridheight + 1, 0)
+    wrapGrid.set(grid.get(0, 0), gridheight + 1, gridwidth + 1)
+    return wrapGrid
+}
 // ...**** WORLD ****
 
 // **** RULES ****...
@@ -55,7 +78,7 @@ function countNeighbors(rows, cols) {
     
     for (let r = 0; r < rows.length; r++) {
         for (let c = 0; c < cols.length; c++) {
-            if (r*c != 1 && world.get(rows[r], cols[c])) {
+            if (r*c != 1 && wrapWorld.get(rows[r], cols[c])) {
                 n += 1
             }
         }
@@ -65,7 +88,7 @@ function countNeighbors(rows, cols) {
 
 function changeState(irow, icol, env) {
 
-    if ((world.get(irow, icol) && (env == 2)) || (env == 3)) {
+    if ((wrapWorld.get(irow + 1, icol + 1) && (env == 2)) || (env == 3)) {
         nextWorld.set(true, irow, icol)
     } else {
         nextWorld.set(false, irow, icol)
@@ -75,52 +98,16 @@ function changeState(irow, icol, env) {
 function updateWorld() {
     let neighbors = 0
 
+    wrapWorld = makeWrap(world)
+    wrapWorld.toString()
+
     for (let i = 0 ; i < gridheight; i++) {
-        if (i == 0) {
-            const indicesH = [gridwidth - 1, 0, 1]
-            for (let j = 0 ; j < gridwidth; j++) {
-                if (j == 0) {
-                    const indicesW = [gridwidth - 1, 0, 1]
-                    neighbors = countNeighbors(indicesH, indicesW)
-                } else if (j == gridwidth - 1) {
-                    const indicesW = [gridwidth - 2, gridwidth - 1, 0]
-                    neighbors = countNeighbors(indicesH, indicesW)
-                } else {
-                    const indicesW = [j - 1, j, j + 1]
-                    neighbors = countNeighbors(indicesH, indicesW)
-                }
-                changeState(i, j, neighbors)
-            }
-        } else if (i == gridheight - 1) {
-            const indicesH = [gridwidth - 2, gridwidth - 1, 0]
-            for (let j = 0 ; j < gridwidth; j++) {
-                if (j == 0) {
-                    const indicesW = [gridwidth - 1, 0, 1]
-                    neighbors = countNeighbors(indicesH, indicesW)
-                } else if (j == gridwidth - 1) {
-                    const indicesW = [gridwidth - 2, gridwidth - 1, 0]
-                    neighbors = countNeighbors(indicesH, indicesW)
-                } else {
-                    const indicesW = [j - 1, j, j + 1]
-                    neighbors = countNeighbors(indicesH, indicesW)
-                }
-                changeState(i, j, neighbors)
-            }
-        } else {
-            const indicesH = [i - 1, i, i +1]
-            for (let j = 0 ; j < gridwidth; j++) {
-                if (j == 0) {
-                    const indicesW = [gridwidth - 1, 0, 1]
-                    neighbors = countNeighbors(indicesH, indicesW)
-                } else if (j == gridwidth - 1) {
-                    const indicesW = [gridwidth - 2, gridwidth - 1, 0]
-                    neighbors = countNeighbors(indicesH, indicesW)
-                } else {
-                    const indicesW = [j - 1, j, j + 1]
-                    neighbors = countNeighbors(indicesH, indicesW)
-                }
-                changeState(i, j, neighbors)
-            }
+        const indicesH = [i, i + 1 , i + 2]
+        for (let j = 0 ; j < gridwidth; j++) {
+            const indicesW = [j, j + 1, j + 2]
+            
+            neighbors = countNeighbors(indicesH, indicesW)
+            changeState(i, j, neighbors)
         }
     }
 
@@ -155,13 +142,14 @@ drawRect = (x,y,c,s) => {
 update = () => {
     // **** RULES ****...
     reset(nextWorld)
-    updateWorld()
+    //updateWorld()
     // ...**** RULES ****
     m.clearRect(0, 0, screenwidth, screenheight)
     drawRect(0, 0, "black", screensize)
     
     draw(world)
-    
+    updateWorld()
+    world.toString()
     requestAnimationFrame(update)
     
 }
@@ -195,6 +183,7 @@ m = c.getContext('2d')
 // create the world
 let world = new World(gridwidth, gridheight)
 let nextWorld = new World(gridwidth, gridheight)
+let wrapWorld = makeWrap(world)
 // initialize the world
 reset(world)
 reset(nextWorld)
