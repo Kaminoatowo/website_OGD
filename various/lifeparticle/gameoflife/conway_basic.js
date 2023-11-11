@@ -49,8 +49,22 @@ class World {
 // ...**** WORLD ****
 
 // **** RULES ****...
+function countNeighbors(rows, cols) {
+
+    let n = 0
+    
+    for (let r = 0; r < rows.length; r++) {
+        for (let c = 0; c < cols.length; c++) {
+            if (r*c != 1 && world.get(rows[r], cols[c])) {
+                n += 1
+            }
+        }
+    }
+    return n
+}
 
 function changeState(irow, icol, env) {
+
     if ((world.get(irow, icol) && (env == 2)) || (env == 3)) {
         nextWorld.set(true, irow, icol)
     } else {
@@ -58,57 +72,54 @@ function changeState(irow, icol, env) {
     }
 }
 
-function convolveState(irow, icol, rows, cols) {
-    let volume = []
-    for (let r = 0; r < rows.length; r++) {
-        for (let c = 0; c < cols.length; c++) {
-            volume.push(world.get(rows[r], cols[c]) ? 1 : 0)
-        }
-    }
-    const convolved = (convolve2(volume, kernel).reduce((a, b) => a + b, 0))///kernel_sum
-    changeState(irow, icol, convolved)
-}
+function updateWorld() {
+    let neighbors = 0
 
-function updateConvolution() {
-    for (let i = 0; i < gridheight; i++) {
+    for (let i = 0 ; i < gridheight; i++) {
         if (i == 0) {
             const indicesH = [gridwidth - 1, 0, 1]
-            let indicesW = []
             for (let j = 0 ; j < gridwidth; j++) {
                 if (j == 0) {
-                    indicesW = [gridwidth - 1, 0, 1]
+                    const indicesW = [gridwidth - 1, 0, 1]
+                    neighbors = countNeighbors(indicesH, indicesW)
                 } else if (j == gridwidth - 1) {
-                    indicesW = [gridwidth - 2, gridwidth - 1, 0]                    
+                    const indicesW = [gridwidth - 2, gridwidth - 1, 0]
+                    neighbors = countNeighbors(indicesH, indicesW)
                 } else {
-                    indicesW = [j - 1, j, j + 1]                    
+                    const indicesW = [j - 1, j, j + 1]
+                    neighbors = countNeighbors(indicesH, indicesW)
                 }
-                convolveState(i, j, indicesH, indicesW)
+                changeState(i, j, neighbors)
             }
         } else if (i == gridheight - 1) {
             const indicesH = [gridwidth - 2, gridwidth - 1, 0]
-            let indicesW = []
             for (let j = 0 ; j < gridwidth; j++) {
                 if (j == 0) {
-                    indicesW = [gridwidth - 1, 0, 1]                    
+                    const indicesW = [gridwidth - 1, 0, 1]
+                    neighbors = countNeighbors(indicesH, indicesW)
                 } else if (j == gridwidth - 1) {
-                    indicesW = [gridwidth - 2, gridwidth - 1, 0]                    
+                    const indicesW = [gridwidth - 2, gridwidth - 1, 0]
+                    neighbors = countNeighbors(indicesH, indicesW)
                 } else {
-                    indicesW = [j - 1, j, j + 1]                    
+                    const indicesW = [j - 1, j, j + 1]
+                    neighbors = countNeighbors(indicesH, indicesW)
                 }
-                convolveState(i, j, indicesH, indicesW)
+                changeState(i, j, neighbors)
             }
         } else {
             const indicesH = [i - 1, i, i +1]
-            let indicesW = []
             for (let j = 0 ; j < gridwidth; j++) {
                 if (j == 0) {
-                    indicesW = [gridwidth - 1, 0, 1]                    
+                    const indicesW = [gridwidth - 1, 0, 1]
+                    neighbors = countNeighbors(indicesH, indicesW)
                 } else if (j == gridwidth - 1) {
-                    indicesW = [gridwidth - 2, gridwidth - 1, 0]                    
+                    const indicesW = [gridwidth - 2, gridwidth - 1, 0]
+                    neighbors = countNeighbors(indicesH, indicesW)
                 } else {
-                    indicesW = [j - 1, j, j + 1]                    
+                    const indicesW = [j - 1, j, j + 1]
+                    neighbors = countNeighbors(indicesH, indicesW)
                 }
-                convolveState(i, j, indicesH, indicesW)
+                changeState(i, j, neighbors)
             }
         }
     }
@@ -119,6 +130,7 @@ function updateConvolution() {
         }
     }
 }
+
 // ...**** RULES ****
 
 // **** SCREEN **** ...
@@ -143,7 +155,7 @@ drawRect = (x,y,c,s) => {
 update = () => {
     // **** RULES ****...
     reset(nextWorld)
-    updateConvolution()
+    updateWorld()
     // ...**** RULES ****
     m.clearRect(0, 0, screenwidth, screenheight)
     drawRect(0, 0, "black", screensize)
@@ -151,6 +163,7 @@ update = () => {
     draw(world)
     
     requestAnimationFrame(update)
+    
 }
 // ...**** SCREEN ****
 
@@ -173,55 +186,12 @@ randomSetter = (grid, number) => {
         grid.set(true, random(), random())
     }
 }
-
-// convolution function
-const convolve = (vec1, vec2) => {
-    if (vec1.length === 0 || vec2.length === 0) {
-        throw new Error('Vectors must not be empty')
-    }
-    const volume = vec1
-    const kernel = vec2
-     /* Initialized to zero by default */
-    const convVec = new Float32Array(volume.length + kernel.length);
-
-    let i = 0;
-    for (let j = 0; j < kernel.length; ++j) {
-        convVec[j] = volume[i] * kernel[j];
-    }
-
-    for (i = 1; i < volume.length; ++i) {
-        for (let j = 0; j < kernel.length; ++j) {
-            convVec[i + j] += volume[i] * kernel[j];
-        }
-    }
-
-    return convVec;
-}
-
-const convolve2 = (vec1, vec2) => {
-    if (vec1.length === 0 || vec2.length === 0) {
-        throw new Error('Vectors must not be empty')
-    }
-    const volume = vec1
-    const kernel = vec2
-     /* Initialized to zero by default */
-    const convVec = new Float32Array(volume.length);
-
-    for (i = 0; i < volume.length; ++i) {
-        convVec[i] = volume[i] * kernel[i];
-    }
-
-    return convVec;
-}
 // ...**** VARIOUS ****
 
 // **** MAIN ****...
 // link to the canvas
 c = document.getElementById("life")
 m = c.getContext('2d')
-// define kernel
-const kernel = [1, 1, 1, 1, 0, 1, 1, 1, 1]
-const kernel_sum = kernel.reduce((a, b) => a + b, 0)
 // create the world
 let world = new World(gridwidth, gridheight)
 let nextWorld = new World(gridwidth, gridheight)
