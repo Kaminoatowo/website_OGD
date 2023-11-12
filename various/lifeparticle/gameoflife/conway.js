@@ -75,11 +75,19 @@ const makeWrap = (grid) => {
 
 function changeState(irow, icol, env) {
 
-    if ((wrapWorld.get(irow + 1, icol + 1) && (env == 2)) || (env == 3)) {
+    /*if ((wrapWorld.get(irow + 1, icol + 1) && (env == 2)) || (env == 3)) {
         nextWorld.set(true, irow, icol)
     } else {
         nextWorld.set(false, irow, icol)
-    }
+    }*/
+    
+    let growth = (wrapWorld.get(irow + 1, icol + 1) ? 1 : 0) + grow(env)
+    let clipped = clip(growth, 0, 1)
+    /*console.log("row: " + irow + " col: " + icol)
+    console.log("env: " + env +  " grow: " + grow(env))
+    console.log("W[" + irow + "][" + icol + "]: " + (wrapWorld.get(irow + 1, icol + 1) ? 1 : 0) + " + grow: " + growth)
+    console.log("clip(W[i][j] + grow): " + clipped)*/
+    nextWorld.set(clipped, irow, icol)
 }
 
 function convolveState(irow, icol, rows, cols) {
@@ -100,7 +108,7 @@ function updateWorld() {
     let neighbors = 0
 
     wrapWorld = makeWrap(world)
-    wrapWorld.toString()
+    //wrapWorld.toString()
 
     for (let i = 0 ; i < gridheight; i++) {
         const indicesH = [i, i + 1 , i + 2]
@@ -190,6 +198,16 @@ const convolve2 = (vec1, vec2) => {
     }
 
     return convVec;
+}
+
+// growth function
+const grow = (conv) => {
+    return 0 + (conv == 3 ? 1 : 0) - ((conv < 2 || conv > 3) ? 1 : 0)
+}
+
+// clip function
+const clip = (value, min, max) => {
+    return Math.min(Math.max(value, min), max)
 }
 // ...**** VARIOUS ****
 
