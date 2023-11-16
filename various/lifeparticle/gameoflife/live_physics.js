@@ -107,7 +107,23 @@ update = () => {
     }
     requestAnimationFrame(update)
 }
-// ...**** SCREEN ****1
+
+initialize = () => {
+    particles = []
+    let numberOfParticles = 2
+    let numberOfAtoms = 100
+    let electronMass = 1
+    let protonMass = 1000 * electronMass
+    nuclei = create(numberOfAtoms, "yellow", numberOfParticles*protonMass, numberOfParticles)
+    electrons = create(numberOfParticles*numberOfAtoms, "green", electronMass, -1)
+
+    m.clearRect(0, 0, screenwidth, screenheight)
+    draw(0, 0, "black", screensize)
+    for (i = 0; i < particles.length; i++) {
+        draw(particles[i].x, particles[i].y, particles[i].color, PARTICLE_SIZE)
+    }
+}
+// ...**** SCREEN ****
 
 // **** MAIN ****...
 /*canva = document.createElement("canvas")
@@ -115,12 +131,9 @@ canva.id = "life"
 canva.width = screenwidth
 canva.height = screenheight*/
 m = document.getElementById("life").getContext('2d')
-particles = []
-let numberOfParticles = 2
-let numberOfAtoms = 100
-let electronMass = 1
-let protonMass = 1000 * electronMass
-nuclei = create(numberOfAtoms, "yellow", numberOfParticles*protonMass, numberOfParticles)
-electrons = create(numberOfParticles*numberOfAtoms, "green", electronMass, -1)
-update()
+
+initialize()
+document.getElementById("start").onclick = function(){update()}
+document.getElementById("reset").onclick = function(){initialize()}
+
 // ...**** MAIN ****

@@ -149,7 +149,6 @@ drawRect = (x,y,c,s) => {
 // update screen frame
 update = () => {
     // **** RULES ****...
-    reset(nextWorld)
     updateWorld()
     // ...**** RULES ****
     m.clearRect(0, 0, screenwidth, screenheight)
@@ -159,8 +158,23 @@ update = () => {
     //updateWorld()
     //world.toString()
     requestAnimationFrame(update)
-    
 }
+
+initialize = () => {
+    reset(world)
+    reset(nextWorld)
+    // set the initial state
+    randomSetter(world, NUMBER_PARTICLES)
+    /*world.set(true, 2, 1)
+    world.set(true, 2, 2)
+    world.set(true, 2, 3)*/
+
+    m.clearRect(0, 0, screenwidth, screenheight)
+    drawRect(0, 0, "black", screensize)
+    
+    draw(world)
+}
+
 // ...**** SCREEN ****
 
 // **** VARIOUS ****...
@@ -223,15 +237,10 @@ let world = new World(gridwidth, gridheight)
 let nextWorld = new World(gridwidth, gridheight)
 let wrapWorld = makeWrap(world)
 // initialize the world
-reset(world)
-reset(nextWorld)
-// set the initial state
-randomSetter(world, NUMBER_PARTICLES)
-/*world.set(true, 2, 1)
-world.set(true, 2, 2)
-world.set(true, 2, 3)*/
 // start the animation
-update()
+initialize()
+document.getElementById("start").onclick = function(){update()}
+document.getElementById("reset").onclick = function(){initialize()}
 // TODO
 
 // ...**** MAIN ****

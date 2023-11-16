@@ -118,6 +118,21 @@ update = () => {
     }
     requestAnimationFrame(update)
 }
+
+initialize = () => {
+    particles = []
+
+    yellow = create(200, "yellow")
+    red = create(200, "red")
+    green = create(200, "green")
+    purple = create(200, "purple")
+
+    m.clearRect(0, 0, screenwidth, screenheight)
+    draw(0, 0, "black", screensize)
+    for (i = 0; i < particles.length; i++) {
+        draw(particles[i].x, particles[i].y, particles[i].color, PARTICLE_SIZE)
+    }
+}
 // ...**** SCREEN ****
 
 // **** MAIN ****...
@@ -126,10 +141,8 @@ canva.id = "life"
 canva.width = screenwidth
 canva.height = screenheight*/
 m = document.getElementById("life").getContext('2d')
-particles = []
-yellow = create(200, "yellow")
-red = create(200, "red")
-green = create(200, "green")
-purple = create(200, "purple")
-update()
+
+initialize()
+document.getElementById("start").onclick = function(){update()}
+document.getElementById("reset").onclick = function(){initialize()}
 // ...**** MAIN ****
