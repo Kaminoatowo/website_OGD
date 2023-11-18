@@ -11,7 +11,9 @@ body {
 }
 
 div.desc {
+    position: relative;
     margin: 0% 5%;
+    height: max-content;
 }
 
 h1 {
@@ -41,9 +43,11 @@ img.center {
 }
 
 img.gallery {
-    height: 50%;
-    width: 50%;
+    position: relative;
+    height: 90px;
+    width: auto;
     margin: 5% 25%;
+    border-radius: 15px;
 }
 
 li.nav_body {
@@ -75,6 +79,12 @@ ul.nav_head {
     margin: 0;
     padding: 1em;
     overflow: hidden;
+}
+
+.abstract-frame {
+    position: relative;
+    top: 10px;
+    height: 80%;
 }
 
 .blue_btn {
@@ -117,6 +127,10 @@ ul.nav_head {
     scrollbar-width: none;  /* Firefox */
 }
 
+.desc {
+    padding: 15px;
+}
+
 .dot {
   height: 5px;
   width: 5px;
@@ -126,11 +140,17 @@ ul.nav_head {
   margin: 1% 0%;
 }
 
+.foot-frame {
+    position: relative;
+    bottom: -40px;
+}
+
 .frame {
     background-color: aliceblue;
     align-items: center;
     border-radius: 5px;
     margin: 5px;
+    height: 27em;
 }
 
 .gray_text {
@@ -188,6 +208,11 @@ ul.nav_head {
 
 .page_numbers a:hover {
     color: crimson;
+}
+
+.title-frame {
+    position: relative;
+    top: 0px;
 }
 
 /*.topleft {
