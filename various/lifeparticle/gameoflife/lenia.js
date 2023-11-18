@@ -7,21 +7,18 @@ const upperlefty = 0
 // width and height of the screen
 const screenwidth = screensize
 const screenheight = screensize
+// number of states
+const STATES = 12
 // size of particles 
 /*const PARTICLE_SIZE = screensize/100
 const NUMBER_PARTICLES = 10000//screenheight*screenwidth/(2)*/
-const PARTICLE_SIZE = screensize/5
-const NUMBER_PARTICLES = 8
+const CELLS_ROW = 100
+const PARTICLE_SIZE = screensize/CELLS_ROW
+const NUMBER_PARTICLES = CELLS_ROW*CELLS_ROW
 // width and height of the grid
 const gridwidth = screenwidth/PARTICLE_SIZE
 const gridheight = screenheight/PARTICLE_SIZE
 // multipliers of particles' velocity
-const SPEED = 0.5
-// limits of the particles' world
-const mind = 0
-const maxd = 80
-const minpos = 0
-const maxpos = 500
 // ...**** CONSTANTS ****
 
 // **** WORLD ****...
@@ -29,8 +26,7 @@ class World {
     constructor(w, h) {
         this.w = w
         this.h = h 
-        this.cells = new Array(w * h).fill(false)
-        this.numbers = new Array(this.w * this.h).fill(0)
+        this.cells = new Array(w * h).fill(0)
     }
 
     get(row, col) {
@@ -39,7 +35,6 @@ class World {
 
     set(value, row, col) {
         this.cells[col + row * this.w] = value
-        this.numbers[col + row * this.w] =  value ? 1 : 0
     }
 
     toString() {
@@ -74,40 +69,29 @@ const makeWrap = (grid) => {
 // **** RULES ****...
 
 function changeState(irow, icol, env) {
-
-    /*if ((wrapWorld.get(irow + 1, icol + 1) && (env == 2)) || (env == 3)) {
-        nextWorld.set(true, irow, icol)
-    } else {
-        nextWorld.set(false, irow, icol)
-    }*/
     
-    let growth = (wrapWorld.get(irow + 1, icol + 1) ? 1 : 0) + grow(env)
-    let clipped = clip(growth, 0, 1)
-    /*console.log("row: " + irow + " col: " + icol)
-    console.log("env: " + env +  " grow: " + grow(env))
-    console.log("W[" + irow + "][" + icol + "]: " + (wrapWorld.get(irow + 1, icol + 1) ? 1 : 0) + " + grow: " + growth)
-    console.log("clip(W[i][j] + grow): " + clipped)*/
+    let growth = (wrapWorld.get(irow + 1, icol + 1)) + grow(env)
+    //console.log(growth)
+    let clipped = clip(growth, 0, STATES)
+    //console.log(clipped)
     nextWorld.set(clipped, irow, icol)
+    //console.log(nextWorld.get(irow, icol))
 }
 
 function convolveState(irow, icol, rows, cols) {
     let volume = []
     for (let r = 0; r < rows.length; r++) {
         for (let c = 0; c < cols.length; c++) {
-            volume.push(wrapWorld.get(rows[r], cols[c]) ? 1 : 0)
+            volume.push(wrapWorld.get(rows[r], cols[c]))
         }
     }
-    console.log(volume)
     
-    const convolved = (convolve2(volume, kernel).reduce((a, b) => a + b, 0))///kernel_sum
-    //console.log("row: " + irow + " col: " + icol + " -> " + convolved)
+    const convolved = (convolve2(volume, kernel).reduce((a, b) => a + b, 0))
     changeState(irow, icol, convolved)
 }
 
 function updateWorld() {
-
     wrapWorld = makeWrap(world)
-    //wrapWorld.toString()
 
     for (let i = 0 ; i < gridheight; i++) {
         const indicesH = [i, i + 1 , i + 2]
@@ -124,7 +108,6 @@ function updateWorld() {
         }
     }
 }
-
 // ...**** RULES ****
 
 // **** SCREEN **** ...
@@ -133,7 +116,7 @@ draw = (grid) => {
     for (let i = 0; i < gridheight; i++) {
         for (let j = 0; j < gridwidth; j++) {
             if (grid.get(i, j)) {
-                m.fillStyle = "white";
+                m.fillStyle = 'rgb(255, 255, 255, ' + grid.get(i, j)/STATES + ')';
                 m.fillRect(j*screenwidth/gridwidth, i*screenheight/gridheight, PARTICLE_SIZE, PARTICLE_SIZE)
             }
         }
@@ -147,7 +130,7 @@ drawRect = (x,y,c,s) => {
 
 // update screen frame
 update = () => {
-    step()
+    step() 
     requestAnimationFrame(update)
 }
 
@@ -157,6 +140,8 @@ step = () => {
     drawRect(0, 0, "black", screensize)
     
     draw(world)
+    
+    //world.toString()
 }
 
 initialize = () => {
@@ -164,9 +149,7 @@ initialize = () => {
     reset(nextWorld)
     // set the initial state
     randomSetter(world, NUMBER_PARTICLES)
-    /*world.set(true, 2, 1)
-    world.set(true, 2, 2)
-    world.set(true, 2, 3)*/
+    
 
     m.clearRect(0, 0, screenwidth, screenheight)
     drawRect(0, 0, "black", screensize)
@@ -178,21 +161,21 @@ initialize = () => {
 
 // **** VARIOUS ****...
 // redefine random function
-random = () => {
-    return Math.floor(Math.random()*gridwidth)
+random = (max) => {
+    return Math.floor(Math.random()*max)
 }
 
 reset = (grid) => {
     for (let i = 0; i < gridheight; i++) {
         for (let j = 0; j < gridwidth; j++) {
-            grid.set(false, i, j)
+            grid.set(0, i, j)
         }
     }
 }
 
 randomSetter = (grid, number) => {
-    for (let i = 0; i < number; i++) {
-        grid.set(true, random(), random())
+    for (let i = 0; i < number+1; i++) {
+        grid.set(random(STATES+1), random(gridheight), random(gridwidth))
     }
 }
 
@@ -215,7 +198,8 @@ const convolve2 = (vec1, vec2) => {
 
 // growth function
 const grow = (conv) => {
-    return 0 + (conv == 3 ? 1 : 0) - ((conv < 2 || conv > 3) ? 1 : 0)
+    //return 0 + (conv == 3 ? 1 : 0) - ((conv < 2 || conv > 3) ? 1 : 0)
+    return 0 + ((conv >= 20 && conv <= 24) ? 1 : 0) - ((conv <= 18 || conv >= 32) ? 1 : 0)
 }
 
 // clip function
@@ -230,7 +214,7 @@ c = document.getElementById("life")
 m = c.getContext('2d')
 // define kernel
 const kernel = [1, 1, 1, 1, 0, 1, 1, 1, 1]
-const kernel_sum = kernel.reduce((a, b) => a + b, 0)
+const kernel_sum = kernel.reduce((a, b) => a + b, 0) * STATES
 // create the world
 let world = new World(gridwidth, gridheight)
 let nextWorld = new World(gridwidth, gridheight)
@@ -238,6 +222,7 @@ let wrapWorld = makeWrap(world)
 // initialize the world
 // start the animation
 initialize()
+world.toString()
 document.getElementById("step").onclick = function(){step()}
 document.getElementById("start").onclick = function(){update()}
 document.getElementById("reset").onclick = function(){initialize()}
