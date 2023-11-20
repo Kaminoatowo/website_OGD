@@ -45,25 +45,17 @@ class World {
 }
 
 const makeWrap = (grid) => {
-    let wrapGrid = new World(gridwidth + 2, gridheight + 2)
+    let wrapGrid = new World(3*gridwidth, 3*gridheight)
 
     for (let i = 0; i < gridheight; i++) {
         for (let j = 0; j < gridwidth; j++) {
-            wrapGrid.set(grid.get(i, j), i + 1, j + 1)
+            for (let k = 0; k < 3; k++){
+                for (let l = 0; l < 3; l++){
+                    wrapGrid.set(grid.get(i, j), i + k*gridheight, j + l*gridwidth)
+                }
+            }
         }
     }
-    for (let i = 0; i < gridheight; i++) {
-        wrapGrid.set(grid.get(i, gridwidth - 1), i + 1, 0)
-        wrapGrid.set(grid.get(i, 0), i + 1, gridwidth + 1)
-    }
-    for (let j = 0; j < gridwidth; j++) {
-        wrapGrid.set(grid.get(gridheight - 1, j), 0, j + 1)
-        wrapGrid.set(grid.get(0, j), gridheight + 1, j + 1)
-    }
-    wrapGrid.set(grid.get(gridheight - 1, gridwidth - 1), 0, 0)
-    wrapGrid.set(grid.get(gridheight - 1, 0), 0, gridwidth + 1)
-    wrapGrid.set(grid.get(0, gridwidth - 1), gridheight + 1, 0)
-    wrapGrid.set(grid.get(0, 0), gridheight + 1, gridwidth + 1)
     return wrapGrid
 }
 // ...**** WORLD ****
@@ -72,19 +64,19 @@ const makeWrap = (grid) => {
 
 function changeState(irow, icol, env) {
     
-    let growth = (wrapWorld.get(irow + 1, icol + 1)) + grow(env) / UPDATE_FREQUENCY
+    let growth = (wrapWorld.get(irow, icol)) + grow(env) / UPDATE_FREQUENCY
     //console.log(growth)
-    let clipped = clip(growth, 0, STATES)
+    let clipped = clip(growth, 0, 1)
     //console.log(clipped)
     nextWorld.set(clipped, irow, icol)
     //console.log(nextWorld.get(irow, icol))
 }
 
-function convolveState(irow, icol, rows, cols) {
+function convolveState(irow, icol) {
     let volume = []
-    for (let r = 0; r < rows.length; r++) {
-        for (let c = 0; c < cols.length; c++) {
-            volume.push(wrapWorld.get(rows[r], cols[c]))
+    for (let r = -KERNEL_RADIUS ; r < KERNEL_RADIUS; r++) {
+        for (let c = -KERNEL_RADIUS; c < KERNEL_RADIUS; c++) {
+            volume.push(wrapWorld.get(irow + r, icol + c))
         }
     }
     
@@ -94,13 +86,11 @@ function convolveState(irow, icol, rows, cols) {
 
 function updateWorld() {
     wrapWorld = makeWrap(world)
+    wrapWorld.toString()
 
     for (let i = 0 ; i < gridheight; i++) {
-        const indicesH = [i, i + 1 , i + 2]
         for (let j = 0 ; j < gridwidth; j++) {
-            const indicesW = [j, j + 1, j + 2]
-            
-            convolveState(i, j, indicesH, indicesW)
+            convolveState(i, j)
         }
     }
 
