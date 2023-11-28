@@ -10,8 +10,9 @@ const screenheight = screensize
 // size of particles 
 /*const PARTICLE_SIZE = screensize/100
 const NUMBER_PARTICLES = 10000//screenheight*screenwidth/(2)*/
-const PARTICLE_SIZE = screensize/5
-const NUMBER_PARTICLES = 8
+const CELLS_ROW = 50
+const PARTICLE_SIZE = screensize/CELLS_ROW
+const NUMBER_PARTICLES = CELLS_ROW*CELLS_ROW
 // width and height of the grid
 const gridwidth = screenwidth/PARTICLE_SIZE
 const gridheight = screenheight/PARTICLE_SIZE
@@ -75,18 +76,8 @@ const makeWrap = (grid) => {
 
 function changeState(irow, icol, env) {
 
-    /*if ((wrapWorld.get(irow + 1, icol + 1) && (env == 2)) || (env == 3)) {
-        nextWorld.set(true, irow, icol)
-    } else {
-        nextWorld.set(false, irow, icol)
-    }*/
-    
     let growth = (wrapWorld.get(irow + 1, icol + 1) ? 1 : 0) + grow(env)
     let clipped = clip(growth, 0, 1)
-    /*console.log("row: " + irow + " col: " + icol)
-    console.log("env: " + env +  " grow: " + grow(env))
-    console.log("W[" + irow + "][" + icol + "]: " + (wrapWorld.get(irow + 1, icol + 1) ? 1 : 0) + " + grow: " + growth)
-    console.log("clip(W[i][j] + grow): " + clipped)*/
     nextWorld.set(clipped, irow, icol)
 }
 
@@ -97,10 +88,8 @@ function convolveState(irow, icol, rows, cols) {
             volume.push(wrapWorld.get(rows[r], cols[c]) ? 1 : 0)
         }
     }
-    console.log(volume)
     
     const convolved = (convolve2(volume, kernel).reduce((a, b) => a + b, 0))///kernel_sum
-    //console.log("row: " + irow + " col: " + icol + " -> " + convolved)
     changeState(irow, icol, convolved)
 }
 

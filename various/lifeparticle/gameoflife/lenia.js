@@ -14,7 +14,7 @@ const KERNEL_RADIUS = 5
 // size of particles 
 /*const PARTICLE_SIZE = screensize/100
 const NUMBER_PARTICLES = 10000//screenheight*screenwidth/(2)*/
-const CELLS_ROW = 100
+const CELLS_ROW = 50
 const PARTICLE_SIZE = screensize/CELLS_ROW
 const NUMBER_PARTICLES = CELLS_ROW*CELLS_ROW
 // width and height of the grid
@@ -64,9 +64,9 @@ const makeWrap = (grid) => {
 
 function changeState(irow, icol, env) {
     
-    let growth = (wrapWorld.get(irow, icol)) + grow(env) / UPDATE_FREQUENCY
+    let growth = (wrapWorld.get(irow + gridheight, icol + gridwidth)) + grow(env) / UPDATE_FREQUENCY
     //console.log(growth)
-    let clipped = clip(growth, 0, 1)
+    let clipped = clip(growth, 0.0, 1.0)
     //console.log(clipped)
     nextWorld.set(clipped, irow, icol)
     //console.log(nextWorld.get(irow, icol))
@@ -76,7 +76,7 @@ function convolveState(irow, icol) {
     let volume = []
     for (let r = -KERNEL_RADIUS ; r < KERNEL_RADIUS; r++) {
         for (let c = -KERNEL_RADIUS; c < KERNEL_RADIUS; c++) {
-            volume.push(wrapWorld.get(irow + r, icol + c))
+            volume.push(wrapWorld.get(irow + r + gridheight, icol + c + gridwidth))
         }
     }
     
@@ -86,7 +86,7 @@ function convolveState(irow, icol) {
 
 function updateWorld() {
     wrapWorld = makeWrap(world)
-    wrapWorld.toString()
+    //wrapWorld.toString()
 
     for (let i = 0 ; i < gridheight; i++) {
         for (let j = 0 ; j < gridwidth; j++) {
@@ -235,9 +235,33 @@ const clip = (value, min, max) => {
 c = document.getElementById("life")
 m = c.getContext('2d')
 // define kernel
-//let kernel = [1, 1, 1, 1, 0, 1, 1, 1, 1]
-let kernel = new Array((KERNEL_RADIUS*2+1)*(KERNEL_RADIUS*2+1)).fill(1)
-kernel[KERNEL_RADIUS*(KERNEL_RADIUS*2+1)+KERNEL_RADIUS+1] = 0
+/*let kernel =   [0, 1, 1, 1, 0,
+                1, 0, 0, 0, 1,
+                1, 0, 0, 0, 1,
+                1, 0, 0, 0, 1,
+                0, 1, 1, 1, 0]*/
+/*let kernel =   [0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0,
+                0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0,
+                0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0,
+                0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0,
+                1, 1, 1, 1, 0, 0, 0, 1, 1, 1, 1,
+                1, 1, 1, 1, 0, 0, 0, 1, 1, 1, 1,
+                1, 1, 1, 1, 0, 0, 0, 1, 1, 1, 1,
+                0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0,
+                0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0,
+                0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0,
+                0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0]*/
+let kernel =   [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+                1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+                1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+                1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+                1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+                1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1,
+                1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+                1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+                1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+                1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+                1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
 const kernel_sum = kernel.reduce((a, b) => a + b, 0) //* STATES
 kernel = kernel.map(x => x / kernel_sum)
 // create the world

@@ -8,20 +8,26 @@
         <link rel="digital_life.css">
     </head>
     <body>
-        <select onChange="changeAlgo(this.value);">
-            <option id="empty" value="-">Select algorithm</option>
-            <option id="live" value="live">Live</option>
-            <option id="ca1d" value="ca">1D cellular automata</option>
-            <option id="physics" value="live_physics">Live with physics</option>
-            <option id="conway" value="conway">Game of life</option>
-            <option id="lenia" value="lenia">Lenia</option>
-        </select>
+        <div id="selector">
+            <select onChange="changeAlgo(this.value);">
+                <option id="empty" value="-">Select algorithm</option>
+                <option id="live" value="live">Live</option>
+                <option id="ca1d" value="ca">1D cellular automata</option>
+                <option id="physics" value="live_physics">Live with physics</option>
+                <option id="conway" value="conway">Game of life</option>
+                <option id="lenia" value="lenia">Lenia</option>
+            </select>
+        </div>
 
-        <canvas id="life" width="500" height="500"></canvas>
+        <div id="canvas">
+            <canvas id="life" width="500" height="500"></canvas>
+        </div>
 
-        <button id="start">Start</button>
-        <button id="step">Step</button>
-        <button id="reset">Reset</button>
+        <div id="buttons">
+            <button id="start">Start</button>
+            <button id="step">Step</button>
+            <button id="reset">Reset</button>
+        </div>
         
         <script type="text/javascript" src="digital_life.js"></script>
         <script id="life_algorithm" src=""></script>
