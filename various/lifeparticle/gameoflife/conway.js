@@ -10,8 +10,9 @@ const screenheight = screensize
 // size of particles 
 /*const PARTICLE_SIZE = screensize/100
 const NUMBER_PARTICLES = 10000//screenheight*screenwidth/(2)*/
-const PARTICLE_SIZE = screensize/5
-const NUMBER_PARTICLES = 8
+const CELLS_ROW = 100
+const PARTICLE_SIZE = screensize/CELLS_ROW
+const NUMBER_PARTICLES = CELLS_ROW*CELLS_ROW
 // width and height of the grid
 const gridwidth = screenwidth/PARTICLE_SIZE
 const gridheight = screenheight/PARTICLE_SIZE
